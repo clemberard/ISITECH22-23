@@ -48,6 +48,8 @@ Cette méthode est composée de 3 points clés :
 
 ### 2.1 L'appoche systémique
 
+![Alt Texte](img/image.png)
+
 Le système de pilotage :
 
 - Il est composé de l'ensemble des acteurs qui vont **piloter** le système d'information.
@@ -101,3 +103,161 @@ En résumé, on se pose les questions suivantes à partir des données recueilli
 - **Qui** effectue les traitements ?
 
 #### 2.3.3 Le niveau logique
+
+Le niveau logique va permettre de modéliser les données de l'entreprise en utilisant le modèle logique de données (MLD) et les traitements de l'entreprise en utilisant le modèle logique des traitements (MLT).
+
+Le MLD est indépendant des langages de programmation et des SGBD.
+
+On répond à la question : **Avec quoi** les traitements sont-ils effectués ?
+
+#### 2.3.4 Le niveau physique
+
+Il s'agit de l'organisation `réelle` des données. On va utiliser le modèle physique de données (MPD) et le modèle physique des traitements (MPT).
+
+Ici, on apporte les solutions techniques de stockage des données et des traitements.
+
+On répond à la question : **Comment** les traitements sont-ils effectués ?
+
+#### Les 4 niveaux de Merise
+
+![Alt Texte](img/image-1.png)
+
+## 3. Des données aux dépendances fonctionnelles
+
+Pour être intégrées dans un système d'information, les données doivent être triées et organisées. On va souvent tenter de les classer par type de données :
+
+- chaînes de caractères, format texte
+- type alpha-numérique, format texte
+- type numérique, format numérique (integer, float, etc...)
+- type date, format date (date, datetime, timestamp, etc...)
+- type booléen, format booléen (true, false)
+
+Création d'un dictionnaire de données
+
+![Alt Texte](img/image-2.png)
+
+| Nom de la donnée | Format  | Longueur | Type (élémentaire/calculé) |      Règle de calcul      | Règle de gestion | Document |
+| :--------------: | :-----: | :------: | :------------------------: | :-----------------------: | :--------------: | :------: |
+|      Numéro      | Integer |    11    |        élémentaire         |                           |                  |  Fiche   |
+|       Nom        | Varchar |   100    |        élémentaire         |                           |                  |    //    |
+|      Prénom      | Varchar |   100    |        élémentaire         |                           |                  |    //    |
+|     Adresse      | Varchar |   200    |        élémentaire         |                           |                  |    //    |
+|   Code postal    | Varchar |    5     |        élémentaire         |                           |                  |    //    |
+|      Ville       | Varchar |   100    |        élémentaire         |                           |                  |    //    |
+|    Téléphone     | Varchar |    20    |        élémentaire         |                           |                  |    //    |
+|      Email       | Varchar |   100    |        élémentaire         |                           |                  |    //    |
+| Date d'adhésion  |  Date   |          |        élémentaire         |                           |                  |    //    |
+|  Numéro facture  | Integer |          |        élémentaire         |                           |                  | Facture  |
+|     Article      | Varchar |   100    |        élémentaire         |                           |                  |    //    |
+|     Quantité     | Integer |          |        élémentaire         |                           |                  |    //    |
+|  Prix unitaire   |  Float  |          |        élémentaire         |                           |                  |    //    |
+|     Montant      |  Float  |          |          calculé           | Quantité \* Prix unitaire |                  |    //    |
+|   Date facture   |  Date   |          |        élémentaire         |                           |                  |    //    |
+| Numero de compte | Integer |          |        élémentaire         |                           |                  |    //    |
+|   Code guichet   | Integer |          |        élémentaire         |                           |                  |    //    |
+|   Code banque    | Integer |          |        élémentaire         |                           |                  |    //    |
+|     Clé RIB      | Integer |          |        élémentaire         |                           |                  |    //    |
+
+### 3.1 Les dépendances fonctionnelles
+
+Une dépendance fonctionnele est une relation entre deux attributs d'une table. Elle permet de définir une relation de dépendance entre deux attributs d'une table.
+
+![Alt Texte](img/image-4.png)
+![Alt Texte](img/image-5.png)
+![Alt Texte](img/image-6.png)
+![Alt Texte](img/image-7.png)
+
+Le but de l'exercice est d'élaborer un MCD à partir d'un dictionnaire de données.
+
+Ici on va introduire les notions d'entité, de relations et de propriétés.
+
+**Les propriétés sont les informations de bases d'un SI.**
+
+Le rôle d'une dépendance fonctionnelle est de permettre de définir une relation de dépendance entre deux attributs d'une table : une donnéee A dépend fonctionnellement d'une donnée B si et seulement si à une valeur de B correspond une seule valeur de A.
+
+Pour formaliser une dépendance fonctionnelle, on utilise la notation suivante : `Numero adherent (Nom, prenom, cp, ville, tel, date adhesion, email)`
+La partir gauche est la source de la dépendance fonctionnelle et la partie droite est le but de la dépendance fonctionnelle.
+
+#### 3.1.1 Les dépendances fonctionnelles composées
+
+Si une dépendance fonctionnelle qui fait intervenir plus de 2 attributs, on parle de dépendance fonctionnelle composée.
+
+Exemple : Pour connnaître le temps d'un coureur sur une étape donnée, il nous faut son numéro ou son nom ainsi que le nom ou le numero de l'étape.
+
+Formalisation :
+`(numero coureur, numero etape) (temps)`
+
+#### 3.1.2 Les dépendances fonctionnelles élémentaires
+
+Une dépndance fonctionnelle A -> B est élémentaire s'il n'existe pas une donnée C, sous-ensemble de A, décrivant une dépendance fonctionnelle type C -> B.
+
+Exemples :
+
+- RefProduit -> LibelleProduit
+- NumCommande RefProduit -> QuantiteCommandee
+- <strike>NumCommande RefProduit -> DesignationProduit</strike>
+
+#### 3.1.3 Les dépendances fonctionnelles élémentaires directs
+
+Exemple :
+RefPromo -> NumApprenant
+NumApprenant -> NomApprenant
+RefPromo -> NomApprenant
+
+#### 3.1.4 Les entités
+
+Les entités permettent de regrouper les propriétés qui ont des liens entre elles.
+
+Quelques définitions :
+
+- entité forte : une entité forte est une entité qui ne dépend pas d'une autre entité pour exister.
+- entité faible : une entité faible est une entité qui dépend d'une autre entité pour exister.
+
+![Alt Texte](img/image-8.png)
+
+#### 3.1.5 Les relations
+
+Les relations permettent de définir les liens entre les entités.
+
+![Alt Texte](img/image-9.png)
+
+##### 3.1.5.1 Les relations porteuses
+
+Une relation porteuse est une relation qui possède des propriétés.
+
+![Alt Texte](img/image-15.png)
+
+![Alt Texte](img/image-16.png)
+
+##### 3.1.5.2 Les relations réflexives
+
+Une relation réflexive est une relation qui relie une entité à elle-même.
+
+![Alt Texte](img/image-17.png)
+
+#### 3.1.6 Les cardinalités
+
+![Alt Texte](img/image-10.png)
+Elles permettent de définir le nombre d'occurences d'une entité par rapport à une autre entité.
+
+#### Exercice TP MCD
+
+![Alt Texte](img/image-11.png)
+![Alt Texte](img/image-12.png)
+![Alt Texte](img/image-13.png)
+
+**Quelques règles de conception :**
+
+- toute entité doit avoir un identifiant.
+- toutes les propriétés dépendent fonctionnellement de l'identifiant.
+  -le nom de la propriété ne doit apparaître qu'une seule fois dans le MCD : si vous avez une entité Eleve et une entité Professeur, vous ne pouvez pas avoir une propriété nom dans les deux entités. Il faut donc renommer la propriété nom en nom_eleve et nom_professeur.
+- les propriétés issues d'un calcul ne doivent pas apparaître dans le MCD.
+
+### 3.2 Les contraintes d'intégrité fonctionnelle (CIF)
+
+Définiton : Une CIF est déinie par le fait qu'une des entités de l'association est complètement déterminée par la connaissance d'une ou plusieurs autres entités de l'association.
+
+![Alt Texte](img/image-18.png)
+
+Une salle peut contenir 0 ou plusieurs ordinateurs et un ordinateur peut être dans une et une seule salle.
+Dans ce type de relation, une CIF existe si on a une cardinalité 1,1.
