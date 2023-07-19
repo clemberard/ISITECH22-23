@@ -34,6 +34,12 @@ Pour enregistrer les modifications dans le dépôt Git, il faut utiliser la comm
 git commit -m "Message du commit"
 ```
 
+Pour récupérer les modifications effectuées sur le dépôt Git, il faut utiliser la commande:
+
+```sh
+git pull
+```
+
 ## 2. Merise
 
 Merise est une méthode de modélisation de données. Elle permet de représenter les données d'un système d'information.
@@ -261,3 +267,233 @@ Définiton : Une CIF est déinie par le fait qu'une des entités de l'associatio
 
 Une salle peut contenir 0 ou plusieurs ordinateurs et un ordinateur peut être dans une et une seule salle.
 Dans ce type de relation, une CIF existe si on a une cardinalité 1,1.
+
+### 3.3 Modèle logique des données (MLD)
+
+Le MLD est la suite du processus de Merise, on se rapproche un peu plus de la base de données.
+
+Partons du MCD suivant :
+
+![Alt Texte](img/image-19.png)
+
+Nous avons le modèle suivant :
+
+![Alt Texte](img/image-20.png)
+
+L'`entité` qui possède la cardinalité 1,1 ou 0,1 absorbe l'identifiant de l'entité la plus forte (0,n ou 1,n). Cet identifiant devient alors une clé étrangère.
+
+#### 3.3.1 Cas (0,n), (0,n) ou (1,n), (1,n)
+
+Partons du MCD suivant :
+
+![Alt Texte](img/image-21.png)
+
+Dans le cas où la `cardinalité max` est n des 2 côtés, on crée une entité intermédiaire qui va contenir les clés étrangères des 2 entités.
+
+![Alt Texte](img/image-22.png)
+
+Continuons avec le MCD suivant :
+
+![Alt Texte](img/image-23.png)
+
+On obtient le MLD suivant en suivant la même logique :
+
+![Alt Texte](img/image-24.png)
+
+#### 3.3.2 Cas d'une relation réflexive
+
+Partons du MCD suivant :
+
+![Alt Texte](img/image-25.png)
+
+![Alt Texte](img/image-26.png)
+
+##### Exercice pratique
+
+![Alt Texte](img/image-27.png)
+
+Voici le MLD :
+
+![Alt Texte](img/image-28.png)
+
+### 3.4 Modèle physique des données (MPD)
+
+Voici le schema relationnel correspondant au MLD precedent :
+
+- Diplômes (Diplomes)
+- Possède (#NumEmployé, #Diplôme, Date d’obtention)
+- Employés (NumEmployé, Nom, Prénom, Adresse, Code Postal, Ville, Téléphone)
+- Tables (NumTable, Capacité)
+- Date (Date)
+- Service (TypeService, Désignation)
+- Boissons Diverses (NumBoissons, Désignation, Prix de vente)
+- Contenir (#NumCommande, #NumBoissons, Quantité)
+- Commande (NumCommande, #Numemployé, #Date, #TypeService, #NumTable)
+- Comprend (#NumMenu, #NumCommande, Quantité)
+- Menus (NumMenu, Libellé, Prix de vente)
+- Constitué (#NumMenu, #NumPlat)
+- Constituer (#NumCommande, #NumPlat, Quantité)
+- Sélectionner (#NumCommande, #NumVin, Quantité)
+- Carte des vins (NumVin, Nom du vin, Millesime, Prix de vente)
+- Carte des plats (NumPlat, LibelléPlat, Prix de vente, #NumType)
+- Type des plats (NumType, Désignation)
+- Bouteilles (NumBouteille, Date Achat, Prix d’achat, # NumVin, #NumViticulteur)
+- Viticulteur (NumViticulteur, Nom viticulteur, Prénom viticulteur, Adresse viticulteur, Code postal, Ville, Téléphone)
+
+A partir d'ici il est facile de generer le script SQL correspondant.
+
+```SQL
+CREATE TABLE CARTE_DES_VINS
+   (
+   NUMVIN INTEGER(2) NOT NULL ,
+   NOM_DU_VIN CHAR(40)   ,
+   MILLESIME INTEGER(2)  ,
+   PRIX_DE_VENTE REAL(5,2)
+,
+    PRIMARY KEY (NUMVIN) CONSTRAINT PK_CARTE_DES_VINS
+   );
+
+CREATE TABLE BOUTEILLES
+   (
+   NUMVITICULTEUR INTEGER(2) NOT NULL ,
+   NUMVIN INTEGER(2) NOT NULL ,
+   NUMBOUTEILLE INTEGER(2) NOT NULL ,
+   DATE_ACHAT DATE(8) ,
+   PRIX_D_ACHAT REAL(5,2)
+,
+    PRIMARY KEY (NUMVITICULTEUR, NUMVIN, NUMBOUTEILLE) CONSTRAINT
+PK_BOUTEILLES
+   );
+
+
+CREATE TABLE VITICULTEUR
+   (
+   NUMVITICULTEUR INTEGER(2) NOT NULL ,
+   NOM_VITICULTEUR CHAR(20) ,
+   PRÉNOM_VITICULTEUR CHAR(20) ,
+   ADRESSE_VITICULTEUR CHAR(40) ,
+   CODE_POSTAL CHAR(5) ,
+   VILLE CHAR(40) ,
+   TÉLÉPHONE CHAR(15)
+,
+    PRIMARY KEY (NUMVITICULTEUR) CONSTRAINT PK_VITICULTEUR
+   );
+```
+
+## 4 Exercices pratiques
+
+##### N°1
+
+##### N°2
+
+##### N°3
+
+##### N°4
+
+MCD et MLD sur le meme fichier 'Exo_4.asi'. Le MCD est en haut et le MLD en bas.
+
+```SQL
+CREATE TABLE PROPRIETAIRE
+   (
+   ID_PROPRIETAIRES INT(1000) NOT NULL PRIMARY KEY,
+   NOM CHAR(100) ,
+   PRENOM CHAR(100) ,
+   ADRESSE CHAR(200) ,
+   TELEPHONE CHAR(20) ,
+   MAIL CHAR(200)
+   );
+
+CREATE TABLE MAISONS
+   (
+    ID_MAISON CHAR(50) NOT NULL PRIMARY KEY,
+    CP VARCHAR(50),
+    VILLE CHAR(100),
+    SUPERFICIE FLOAT(50),
+    );
+
+CREATE TABLE LOCATAIRES
+    (
+      ID_LOCATAIRE INT(1000) NOT NULL PRIMARY KEY,
+      NOM CHAR(100) ,
+      PRENOM CHAR(100) ,
+      ADRESSE CHAR(200) ,
+      TELEPHONE CHAR(20) ,
+      MAIL CHAR(200)
+    )
+```
+
+##### N°5
+
+MCD et MLD sur le meme fichier 'Exo_5.asi'. Le MCD est en haut et le MLD en bas.
+
+```SQL
+CREATE TABLE PROPRIETAIRE
+   (
+   NUMPROPRIETAIRE INTEGER(2) NOT NULL PRIMARY KEY,
+   NOM CHAR(100) ,
+   PRENOM CHAR(100) ,
+   ADRESSE CHAR(200) ,
+   TELEPHONE CHAR(20) ,
+   FAX CHAR(100) ,
+   EMAIL CHAR(200)
+   );
+
+CREATE TABLE VEHICULE
+   (
+    IMMATRICULATION CHAR(50) NOT NULL PRIMARY KEY,
+    MARQUE CHAR(50),
+    DATEMISEENCIRCULATION DATE(8) ,
+    PUISSANCEFISCALE INTEGER(2) ,
+    NOMBREDEPORTES INTEGER(2) ,
+    NOMBREDEPASSAGERS INTEGER(2) ,
+    POIDSVIDE INTEGER(2) ,
+    POIDSAUTORISE INTEGER(2) ,
+    LONGUEUR INTEGER(2) ,
+    LARGEUR INTEGER(2)
+    );
+
+CREATE TABLE CONTRAT
+    (
+      NUMCONTRAT INTEGER(2) NOT NULL PRIMARY KEY,
+      DATECONTRAT DATE(8) ,
+      CATEGORIE CHAR(50)
+    )
+```
+
+##### N°6
+
+MCD et MLD sur le meme fichier 'Exo_5.asi'. Le MCD est en haut et le MLD en bas.
+
+```SQL
+CREATE TABLE PRODUITS
+   (
+   REFERENCE INT(1000000) NOT NULL PRIMARY KEY,
+   DESIGNATION CHAR(100) ,
+   DESCRIPTIF CHAR(255) ,
+   PRIX_VENTE_CATALOGUE FLOAT(50) ,
+   HEURES_MAIN_OEUVRE INT(50) ,
+   PRIX_ACHAT_UNITAIRE FLOAT(50)
+   );
+
+CREATE TABLE FOURNISSEURS
+   (
+    ID_FOURNISSEUR INT(1000000) NOT NULL PRIMARY KEY,
+    RAISON_SOCIALE CHAR(100),
+    ADRESSE CHAR(200),
+    CP CHAR(20),
+    VILLE CHAR(50),
+    TELEPHONE CHAR(20),
+    EMAIL CHAR(200)
+    );
+
+CREATE TABLE COMMANDES
+    (
+      NUM_COMMANDE INTEGER(1000000) NOT NULL PRIMARY KEY,
+      DATE_COMMANDE DATE(8) ,
+      DATE_LIVRAISON DATE(8) ,
+      QUANTITE INTEGER(2) ,
+      PRIX_UNITAIRE FLOAT(50)
+    ) ;
+```
+
+##### N°7
