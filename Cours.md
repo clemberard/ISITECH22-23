@@ -429,7 +429,7 @@ MCD et MLD sur le meme fichier 'Exo_5.asi'. Le MCD est en haut et le MLD en bas.
 ```SQL
 CREATE TABLE PROPRIETAIRE
    (
-   NUMPROPRIETAIRE INTEGER(2) NOT NULL PRIMARY KEY,
+   NUMPROPRIETAIRE INTEGER(2) NOT NULL PRIMARY KEY AUTO_INCREMENT,
    NOM CHAR(100) ,
    PRENOM CHAR(100) ,
    ADRESSE CHAR(200) ,
@@ -454,7 +454,7 @@ CREATE TABLE VEHICULE
 
 CREATE TABLE CONTRAT
     (
-      NUMCONTRAT INTEGER(2) NOT NULL PRIMARY KEY,
+      NUMCONTRAT INTEGER(2) NOT NULL PRIMARY KEY AUTO_INCREMENT,
       DATECONTRAT DATE(8) ,
       CATEGORIE CHAR(50)
     )
@@ -467,7 +467,7 @@ MCD et MLD sur le meme fichier 'Exo_5.asi'. Le MCD est en haut et le MLD en bas.
 ```SQL
 CREATE TABLE PRODUITS
    (
-   REFERENCE INT(1000000) NOT NULL PRIMARY KEY,
+   REFERENCE INT(1000000) AUTO_INCREMENT NOT NULL PRIMARY KEY,
    DESIGNATION CHAR(100) ,
    DESCRIPTIF CHAR(255) ,
    PRIX_VENTE_CATALOGUE FLOAT(50) ,
@@ -477,7 +477,7 @@ CREATE TABLE PRODUITS
 
 CREATE TABLE FOURNISSEURS
    (
-    ID_FOURNISSEUR INT(1000000) NOT NULL PRIMARY KEY,
+    ID_FOURNISSEUR INT(1000000) AUTO_INCREMENT NOT NULL PRIMARY KEY ,
     RAISON_SOCIALE CHAR(100),
     ADRESSE CHAR(200),
     CP CHAR(20),
@@ -488,7 +488,7 @@ CREATE TABLE FOURNISSEURS
 
 CREATE TABLE COMMANDES
     (
-      NUM_COMMANDE INTEGER(1000000) NOT NULL PRIMARY KEY,
+      NUM_COMMANDE INTEGER(1000000) AUTO_INCREMENT NOT NULL PRIMARY KEY ,
       DATE_COMMANDE DATE(8) ,
       DATE_LIVRAISON DATE(8) ,
       QUANTITE INTEGER(2) ,
@@ -497,3 +497,106 @@ CREATE TABLE COMMANDES
 ```
 
 ##### N°7
+
+## 5 Forme normale
+
+Ensemble de règles qui a pour but d'éviter les anomalies au sein des BDDR.
+Pour appliquer les concepts des formes normales, il est nécessaire de connaître les 3 premières formes normales.
+
+### 5.1 Forme normale 1 (1FN)
+
+Une relation est en première forme noramle si :
+
+- tous les attributs sont atomiques
+- les attributs ne contiennent pas de valeurs répétitives
+
+Exemple :
+Client (NumCli, Nom, Prenom, Adresse, Telephone)
+
+![Alt Texte](img/image-29.png)
+
+### 5.2 Forme normale 2 (2FN)
+
+Une relation est en deuxième forme normale si :
+
+- elle est en 1FN
+- tous les attributs qui ne sont pas des clés ne dépendent pas d'une partie de la clé primaire.
+
+Exemple :
+Commande(NumClient, CodeArticle, Date, QteCommande, Designation)
+
+![Alt Texte](img/image-31.png)
+
+### 5.3 Forme normale 3 (3FN)
+
+Une relation est en troisième forme normale si :
+
+- elle est en 2FN
+- Si toutes les dépendances fonctionnelles sont directes.
+
+Exemple :
+Commande(NumCommande, #CodeClient, #RefArticle)
+
+![Alt Texte](img/image-32.png)
+
+### 5.4 Les diagrammes de flux
+
+Les diagrammes de flux permettent de représenter les flux d'informations entre les acteurs du système d'information et les acteurs du système opérant.
+
+Quelque définitions :
+
+- Domaine d'étude : le périmètre d'une activité au sein d'une entreprise.
+- L'acteur : une personne ou un service qui participe à l'activité.
+- Les flux : les informations qui circulent entre les acteurs, représentés par des flèches portant un nom et numérotées.
+
+Représentation graphique :
+
+![Alt Texte](img/image-35.png)
+
+Quelques règles :
+
+- Un flux ne peut pas relier 2 acteurs.
+- Un flux ne doit pas être reflexif.
+- On ne représente pas les flux entre les acteurs externes.
+
+## 6 UML
+
+UML : Unified Modeling Language (Langage de modélisation unifié) est un langage de modélisation de données. UML a été normalisé en 1997 par l'OMG (Object Management Group). Son but est de mettre en forme les concepts orientés objets au travers de diagrammes.
+
+UML propose 13 diagrammes dépendants de façon hiérarchique et se complétant :
+
+1. Les diagrammes statiques :
+
+- Diagramme de classes
+- Diagramme d'objets
+- Diagramme de composants
+- Diagramme de déploiement
+- Diagramme de paquetages
+- Diagramme de structure composite
+
+2. Les diagrammes comportementaux :
+
+- Diagramme de cas d'usage
+- Diagramme d'activités
+- Diagramme d'états-transitions
+
+3. Les diagrammes dynamiques :
+
+- Diagramme de séquence
+- Diagramme de communication
+- Diagramme de temps
+- Diagramme global d'interaction
+
+### 6.1 Analogie entre Merise et UML
+
+1. Cas du MCD et du diagramme de classes :
+
+Points communs :
+
+- Les entités du MCD sont représentées par des classes dans le diagramme de classes.
+- Les propriétés du MCD sont représentées par des attributs dans le diagramme de classes.
+- Les relations du MCD sont représentées par des associations dans le diagramme de classes.
+
+![Alt Texte](img/image-36.png)
+
+![Alt Texte](img/image-37.png)
