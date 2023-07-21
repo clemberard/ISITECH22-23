@@ -244,7 +244,7 @@ Une relation réflexive est une relation qui relie une entité à elle-même.
 #### 3.1.6 Les cardinalités
 
 ![Alt Texte](img/image-10.png)
-Elles permettent de définir le nombre d'occurences d'une entité par rapport à une autre entité.
+Elles permettent de définir le nombre d'occureences d'une entité par rapport à une autre entité.
 
 #### Exercice TP MCD
 
